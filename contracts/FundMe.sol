@@ -43,20 +43,23 @@ contract FundMe {
   }
 
   receive() external payable {
-    fund();
+    if (msg.value > 100) {
+      fund();
+    }
   }
 
   fallback() external payable {
-    fund();
+    if (msg.value > 100) {
+      fund();
+    }
   }
 
-  //Other Functions 
+  //Other Functions
   /**
    * @notice This function funds this contract
    * @dev This implements price feeds as our library
    */
   function fund() public payable {
-
     if (msg.value.getConversionRate(s_priceFeed) < MINIMUM_USD) {
       revert FundMe__DidNotSendMinimumUSD();
     }
@@ -80,7 +83,6 @@ contract FundMe {
       revert FundMe__WithdrawError();
     }
   }
-
 
   //View, Pure Functions
   function getOwner() public view returns (address) {
